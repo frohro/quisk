@@ -22,16 +22,11 @@ from __future__ import division
 name_of_sound_capt = "pulse"
 name_of_sound_play = "pulse"
 
-# SERIAL PORT SETTINGS
-# Set this as appropriate for your OS.
-openradio_serial_port = "/dev/ttyUSB0"
-openradio_serial_rate = 57600
-
 
 # OpenRadio Frequency limits.
 # These are just within the limits set in the openradio_quisk firmware.
-openradio_lower = 100001
-openradio_upper = 29999999
+openradio_lower = 3800000
+openradio_upper = 30000000
 
 # OpenRadio Hardware Control Class
 #
@@ -40,17 +35,44 @@ from quisk_hardware_model import Hardware as BaseHardware
 
 class Hardware(BaseHardware):
   def open(self):
+    # SERIAL PORT SETTINGS
+    # Set this as appropriate for your OS.
+    openradio_serial_port = "/dev/ttyUSB0"
+    openradio_serial_rate = 57600
     # Called once to open the Hardware
     # Open the serial port.
-    self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    try:
+    	self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    except serial.serialutil.SerialException:
+       openradio_serial_port = "/dev/ttyDummy" # Set to the port for interceptty.
+       # To run interceptty: $ interceptty /dev/ttyACM0 /dev/ttyDummy
+    try:
+    	self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    except serial.serialutil.SerialException:
+    	openradio_serial_port = "/dev/ttyUSB1" # Set to the second serial port for your OS.
+    try:
+    	self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    except serial.serialutil.SerialException:
+       openradio_serial_port = "/dev/ttyACM0" # Set to the third serial port for your OS.
+    try:
+    	self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    except serial.serialutil.SerialException:
+       openradio_serial_port = "/dev/ttyACM1" # Set to the third serial port for your OS.
+    try:
+    	self.or_serial = serial.Serial(openradio_serial_port,openradio_serial_rate,timeout=3)
+    except serial.serialutil.SerialException:
+    	print ("Radio not connected")
+    	raise
     print("Opened Serial Port.")
-    # Wait for the Arduino Nano to restart and boot.
+    # Wait for the Pico to restart and boot.
     time.sleep(2)
     # Poll for version. Should probably confirm the response on this.
-    version = str(self.get_parameter(self, "VER"))
+    version = str(self.get_parameter("VER"))
+
+    print("This should be the version printed next.")
     print(version)
     # Return an informative message for the config screen
-    t = version + ". Capture from sound card %s." % self.conf.name_of_sound_capt
+    t = str(version) + ". Capture from sound card %s." % self.conf.name_of_sound_capt
     return t
 
   def close(self):      
@@ -71,55 +93,65 @@ class Hardware(BaseHardware):
       vfo = openradio_upper
       print("Outside range! Setting to %d" % openradio_upper)
 
-    success = self.set_parameter("FREQ",str(vfo))
+    # success = self.set_parameter("FREQ",str(vfo))
+    self.set_parameter("FREQ",str(vfo))
 
+    print("sample_rate =")
+    print(sample_rate)
     # If the tune frequency is outside the RX bandwidth, set it to somewhere within that bandwidth.
     if(tune>(vfo + sample_rate/2) or tune<(vfo - sample_rate/2)):
       tune = vfo + 10000
       print("Bringing tune frequency back into the RX bandwidth.")
 
-    if success:
-      print("Frequency change succeeded!")
-    else:
-      print("Frequency change failed.")
+    # if success:
+    #   print("Frequency change succeeded!")
+    # else:
+    #   print("Frequency change failed.")
 
     return tune, vfo
 
 #
-# Serial comms functions, to communicate with the OpenRadio board
+# Serial comms functions, to communicate with the Pi Pico board
 #
 
   def get_parameter(self,string):
-    print("Getting parameter: ", string)
-    self.or_serial.write(string+"\n")
+    string = string + "\n"
+    self.or_serial.write(string.encode())
     return self.get_argument()
+    #return string.encode()
         
   def set_parameter(self,string,arg):
-    self.or_serial.write(string+","+arg+"\n")
-    if self.get_argument() == arg:
-      return True
-    else:
-      return False
+    string = string+","+arg+"\r"+"\n"
+    self.or_serial.write(string.encode())
+    print('arg is: ', arg)
+    temp_arg = self.get_argument()
+    print('temp_arg is: ', temp_arg)
+    return True
+    # if temp_arg == arg:
+    #   return True
+    # else:
+    #   return False
     
   def get_argument(self):
-    print("Getting argument.")
     data1 = self.or_serial.readline()
-    print(data1)
     # Do a couple of quick checks to see if there is useful data here
     if len(data1) == 0:
-       return -1
+      return -1
         
     # Maybe we didn't catch an OK line?
-    if data1.startswith('OK'):
+    if data1.startswith(b'OK'):
        data1 = self.or_serial.readline()
+       print('Received: ', data1)
         
     # Check to see if we have a comma in the string. If not, there is no argument.
-    if data1.find(',') == -1:
-       return -1
+    if data1.find(b',') == -1:
+      return -1
     
-    data1 = data1.split(',')[1].rstrip('\r\n')
+    data1 = data1.split(b',')[1].rstrip(b'\r\n')
+    print("data1 =")
+    print(data1)
     
     # Check for the OK string
     data2 = self.or_serial.readline()
-    if data2.startswith('OK'):
-       return data1
+    if data2.startswith(b'OK'):
+      return data1
