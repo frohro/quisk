@@ -5842,7 +5842,7 @@ class App(wx.App):
       if self.w_phase:
         self.w_phase.Redraw()
     if change:
-      if conf.name_of_sound_capt or conf.name_of_mic_play:
+      if conf.name_of_sound_capt or conf.name_of_mic_play:  # Rob, this could be an issue to use RX Phase
         ampl, phase = self.GetAmplPhase('rx')
         QS.set_ampl_phase(ampl, phase, 0)
         ampl, phase = self.GetAmplPhase('tx')
