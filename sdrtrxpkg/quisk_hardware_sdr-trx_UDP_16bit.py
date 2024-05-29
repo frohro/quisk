@@ -113,7 +113,7 @@ class Hardware(BaseHardware):
         # UART is used if get_parameter uses the UART, and UDP is used if it uses the UDP.
         print(version)
         # Return an informative message for the config screen
-        t = str(version) + ". Capture from sound card %s." % self.conf.name_of_sound_capt
+        t = str(version) + ". Using UDP and 16 bit samples from IP:  %s." % self.PICO_UDP_IP
         configs_file = open('transceiver_config.yml', 'r')
         configs = yaml.load(configs_file, Loader=yaml.BaseLoader)
 
