@@ -11,7 +11,7 @@ DEBUG = 0
 ################ Receivers SdrTrx, The SdrTrx radio by Rob Frohne, KL7NA
 ## hardware_file_name		Hardware file path, rfile
 # This is the file that contains the control logic for each radio.
-#hardware_file_name = 'sdrtrxpkg/quisk_hardware.py'
+hardware_file_name = 'sdrtrxpkg/quisk_hardware_sdr-trx.py'
 
 ## widgets_file_name			Widget file path, rfile
 # This optional file adds additional controls for the radio.
@@ -22,6 +22,10 @@ DEBUG = 0
 # value from the data sheet; you can use 'usbsoftrock calibrate' to find
 # the value for your device.
 si570_xtal_freq = 114285000
+# This is for the Si570 oscillator.  The way I did it is to have the user 
+# tune the SDR to 15 MHz WWV and then type that frequency in, and the correction 
+# is calculated from it.  I could use that box, but would like to set the label 
+# to something more appropriate to my Si5351A.  :-)
 
 ## rx_max_amplitude_correct		Max ampl correct, number
 # If you get your I/Q samples from a sound card, you will need to correct the
