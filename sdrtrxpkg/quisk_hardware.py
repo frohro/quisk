@@ -11,7 +11,7 @@ DEBUG = 0
 ################ Receivers SdrTrx, The SdrTrx radio by Rob Frohne, KL7NA
 ## hardware_file_name		Hardware file path, rfile
 # This is the file that contains the control logic for each radio.
-hardware_file_name = 'sdrtrxpkg/quisk_hardware_sdr-trx.py'
+hardware_file_name = 'sdrtrxpkg/quisk_hardware_sdr-trx_UDP_16bit.py'
 
 ## widgets_file_name			Widget file path, rfile
 # This optional file adds additional controls for the radio.
