@@ -59,7 +59,8 @@ class Hardware(BaseHardware):
     ft8_encoder = FT8Send()
     ft4_encoder = FT4Send()
 
-    print(' Pico address is: ', pico_address)
+    self.PICO_UDP_IP = string(conf.pico-address) 
+    print(' Pico address is: ', self.PICO_UDP_IP)
 
     class Packet:
         def __init__(self, data):
