@@ -15,14 +15,14 @@ DEBUG = 0
 
 ## widgets_file_name			Widget file path, rfile
 # This optional file adds additional controls for the radio.
-#widgets_file_name = ''
+# widgets_file_name = ''
 
 ## SDRTRX_15_MHz_Frequequency	15 MHz WWV frequency, number
 # The way I did it is to have the user 
 # tune the SDR to 15 MHz WWV and then type that frequency in, and the correction 
 # is calculated from it.  I could use that box, but would like to set the label 
 # to something more appropriate to my Si5351A.  :-)
-SDRTRX_15_MHz_Frequequency = 114285000
+SDRTRX_15_MHz_Frequequency = 15000000
 
 ## rx_max_amplitude_correct		Max ampl correct, number
 # If you get your I/Q samples from a sound card, you will need to correct the
@@ -37,6 +37,10 @@ rx_max_amplitude_correct = 0.2
 # entered using the controls from the "Rx Phase" button on the config screen.
 # You must enter a positive number.  This controls the range of the control in degrees.
 rx_max_phase_correct = 10.0
+
+## pico_address				IP address, string
+# The IP address of the SDR-TRX radio.
+pico_address = '192.168.1.149'
 
 class Hardware(BaseHardware):
   def __init__(self, app, conf):

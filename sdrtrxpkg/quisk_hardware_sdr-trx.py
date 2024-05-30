@@ -59,6 +59,8 @@ class Hardware(BaseHardware):
     ft8_encoder = FT8Send()
     ft4_encoder = FT4Send()
 
+    print(' Pico address is: ', pico_address)
+
     class Packet:
         def __init__(self, data):
             self.number = struct.unpack('<I', data[:4])[0]
