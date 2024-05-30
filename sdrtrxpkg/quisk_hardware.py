@@ -17,15 +17,11 @@ hardware_file_name = 'sdrtrxpkg/quisk_hardware_sdr-trx.py'
 # This optional file adds additional controls for the radio.
 #widgets_file_name = ''
 
-## si570_xtal_freq			Si570 crystal frequency, integer
-# This is the Si570 startup frequency in Hz.  114.285MHz is the typical
-# value from the data sheet; you can use 'usbsoftrock calibrate' to find
-# the value for your device.
-si570_xtal_freq = 114285000
-# This is for the Si570 oscillator.  The way I did it is to have the user 
+# The way I did it is to have the user 
 # tune the SDR to 15 MHz WWV and then type that frequency in, and the correction 
 # is calculated from it.  I could use that box, but would like to set the label 
 # to something more appropriate to my Si5351A.  :-)
+SDRTRX_15_MHz_Frequequency = 114285000
 
 ## rx_max_amplitude_correct		Max ampl correct, number
 # If you get your I/Q samples from a sound card, you will need to correct the
