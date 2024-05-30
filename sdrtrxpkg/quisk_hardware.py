@@ -17,6 +17,7 @@ hardware_file_name = 'sdrtrxpkg/quisk_hardware_sdr-trx.py'
 # This optional file adds additional controls for the radio.
 #widgets_file_name = ''
 
+## SDRTRX_15_MHz_Frequequency	15 MHz WWV frequency, number
 # The way I did it is to have the user 
 # tune the SDR to 15 MHz WWV and then type that frequency in, and the correction 
 # is calculated from it.  I could use that box, but would like to set the label 
