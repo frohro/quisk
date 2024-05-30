@@ -11,6 +11,7 @@ import os
 from ft8 import FT8Send
 from ft4 import FT4Send
 from quisk_hardware_model import Hardware as BaseHardware
+import quisk_conf_defaults as conf
 import struct
 import collections
 import lib.WSJTXClass as WSJTXClass  # To use encoders
