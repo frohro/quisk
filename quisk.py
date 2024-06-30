@@ -5904,11 +5904,7 @@ class App(wx.App):
       self.waterfall.SetVFO(vfo)
       self.station_screen.Refresh()
     if change:
-<<<<<<< HEAD
-      if conf.name_of_sound_capt or conf.name_of_mic_play:  # Rob, this could be an issue to use RX Phase
-=======
       if (conf.name_of_sound_capt or conf.name_of_mic_play) and QS.get_params("softrock_correct_active") == 0:
->>>>>>> upstream/master
         ampl, phase = self.GetAmplPhase('rx')
         QS.set_ampl_phase(ampl, phase, 0)
         ampl, phase = self.GetAmplPhase('tx')
